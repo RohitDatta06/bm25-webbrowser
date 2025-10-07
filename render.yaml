@@ -6,7 +6,7 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-      # Unpack the DB if shipped compressed
+      # If you committed a compressed DB snapshot:
       if [ -f data/search.db.gz ]; then
         mkdir -p data && gunzip -c data/search.db.gz > data/search.db
       fi
@@ -15,14 +15,15 @@ services:
       - key: DB_PATH
         value: data/search.db
     healthCheckPath: /
-    autoDeploy: true
 
   - type: web
     name: bm25-frontend
     env: node
     plan: free
+    rootDir: frontend
     buildCommand: |
-      npm ci
+      # Use npm install so we don't require a package-lock.json
+      npm install
       npm run build
     startCommand: npm run preview -- --host --port $PORT
     envVars:
@@ -31,5 +32,3 @@ services:
           name: bm25-api
           type: web
           property: host
-      - key: PORT
-        value: "10001"
