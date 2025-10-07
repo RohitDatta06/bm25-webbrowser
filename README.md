@@ -1,4 +1,6 @@
-# BM25 Search Engine(https://bm25-frontend.onrender.com/)
+# BM25 Search Engine
+
+Access site - (https://bm25-frontend.onrender.com/)
 
 A lightweight full-stack search engine that indexes and ranks real web pages using the **BM25 algorithm**.  
 Built with **FastAPI**, **SQLite**, and a **React + TypeScript (Vite)** frontend.  
@@ -52,4 +54,5 @@ The system can crawl websites or ingest data from **Common Crawl WET** files, to
 | **Dev Tools** | pip • npm • virtualenv • sqlite3 • REST APIs • JSON |
 
 ---
+
 
