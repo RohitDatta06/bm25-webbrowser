@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: bm25-api
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      # Unpack the DB if shipped compressed
+      if [ -f data/search.db.gz ]; then
+        mkdir -p data && gunzip -c data/search.db.gz > data/search.db
+      fi
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DB_PATH
+        value: data/search.db
+    healthCheckPath: /
+    autoDeploy: true
+
+  - type: web
+    name: bm25-frontend
+    env: node
+    plan: free
+    buildCommand: |
+      npm ci
+      npm run build
+    startCommand: npm run preview -- --host --port $PORT
+    envVars:
+      - key: VITE_API_BASE
+        fromService:
+          name: bm25-api
+          type: web
+          property: host
+      - key: PORT
+        value: "10001"
