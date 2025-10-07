@@ -71,7 +71,7 @@ export default function App() {
         {/* Typing subtitle */}
         <div className="mb-8 text-center text-gray-600">
           <TextType
-            text={["Text typing effect", "for your websites", "Happy coding!"]}
+            text={["By Rohit Datta"]}
             typingSpeed={75}
             pauseDuration={1500}
             showCursor={true}
