@@ -6,9 +6,11 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-      # If you committed a compressed DB snapshot:
-      if [ -f data/search.db.gz ]; then
-        mkdir -p data && gunzip -c data/search.db.gz > data/search.db
+      mkdir -p data
+      # Rejoin the parts (ensure they exist)
+      if ls data/ccdb_part_* 1> /dev/null 2>&1; then
+        cat data/ccdb_part_* > data/search.db.gz
+        gunzip -f data/search.db.gz   # -> data/search.db
       fi
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
@@ -22,7 +24,6 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: |
-      # Use npm install so we don't require a package-lock.json
       npm install
       npm run build
     startCommand: npm run preview -- --host --port $PORT
